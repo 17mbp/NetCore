@@ -1,13 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Northwind.Model;
-using Northwind.UnitOfWork;
-using WebApi.Models;
-
+using Northwind.BusinessLogic.Interfaces;
 namespace WebApi.Controllers
 {
     [Produces("application/json")]
@@ -15,8 +8,8 @@ namespace WebApi.Controllers
     [Authorize]
     public class OrderController : Controller
     {
-        private readonly IUnityOfWork _unitOfWork;
-        public OrderController (IUnityOfWork unitOfWork)
+        private readonly IOrderLogic _unitOfWork;
+        public OrderController(IOrderLogic unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
@@ -24,19 +17,13 @@ namespace WebApi.Controllers
         [Route("GetPaginatedOrders/{page:int}/{rows:int}")]
         public IActionResult GetPaginatedOrders(int page, int rows)
         {
-            return Ok(_unitOfWork.Order.getPaginatedOrder(page, rows));
-        }
-        [HttpPost]
-        [Route("GetPaginatedSupplier")]///{page:int}/{rows:int}")]
-        public IActionResult GetPaginatedSupplier([FromBody] GetPaginatedSupplier request)
-        {
-            return Ok(_unitOfWork.Supplier.SupplierPagedList(request.Page, request.Rows, request.SearchTerm));
-        }
+            return Ok(_unitOfWork.GetPaginatedOrders(page, rows));
+        }         
         [HttpGet]
         [Route("GetOrderById/{orderId:int}")]
         public IActionResult GetOrderById(int orderId)
         {
-            return Ok(_unitOfWork.Order.GetOrderById(orderId));
+            return Ok(_unitOfWork.GetOrderById(orderId));
         }
     }
 }

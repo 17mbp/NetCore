@@ -1,21 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
+using Northwind.BusinessLogic.Implementations;
+using Northwind.BusinessLogic.Interfaces;
 using Northwind.DataAccess;
 using Northwind.UnitOfWork;
 using WebApi.Authentication;
 using WebApi.ErrorHandling;
-
 namespace WebApi
 {
     public class Startup
@@ -24,11 +19,14 @@ namespace WebApi
         {
             Configuration = configuration;
         }
-
         public IConfiguration Configuration { get; }
         readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";        
         public void ConfigureServices(IServiceCollection services)
-        { 
+        {
+            services.AddTransient<ISupplierLogic, SupplierLogic>();
+            services.AddTransient<ICustomerLogic, CustomerLogic>();
+            services.AddTransient<IOrderLogic, OrderLogic>();
+            services.AddTransient<ITokenLogic, Token>();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddSingleton<IUnityOfWork>(ap => new 
             NorthwindUnitOfWork(Configuration.GetConnectionString("Northwind")));
@@ -59,11 +57,9 @@ namespace WebApi
                 .RequireAuthenticatedUser().Build();
             });  
             services.AddMvc();
-        }
-                
+        }                
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
-        {           
-            //https://www.c-sharpcorner.com/article/enabling-cors-in-asp-net-core-api-application/
+        {    //https://www.c-sharpcorner.com/article/enabling-cors-in-asp-net-core-api-application/
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
