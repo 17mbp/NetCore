@@ -6,7 +6,7 @@ using System.Data;
 using System.Collections.Generic;
 namespace Northwind.DataAccess
 {
-    public class CustomerRepository : Repository<Customer>, ICustomer 
+    public class CustomerRepository : Repository<Customer>, ICustomerRepository 
     {
         public CustomerRepository(string cnnstring) : base(cnnstring)
         {

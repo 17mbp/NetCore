@@ -11,7 +11,7 @@ namespace Northwind.DataAccess
             Supplier = new SupplierRepository(cnnstr);
             Order = new OrderRepository(cnnstr);
         }
-        public ICustomer Customer { get; private set ; }
+        public ICustomerRepository Customer { get; private set ; }
         public IUserRepository User { get; private set; }
         public ISupplierRepository Supplier { get; private set; }
         public IOrderRepository Order { get; private set; }

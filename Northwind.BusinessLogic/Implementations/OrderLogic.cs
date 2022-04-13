@@ -1,5 +1,6 @@
 ﻿using Northwind.BusinessLogic.Interfaces;
 using Northwind.Model;
+using System.Linq;
 using Northwind.UnitOfWork;
 using System.Collections.Generic;
 namespace Northwind.BusinessLogic.Implementations
@@ -26,6 +27,16 @@ namespace Northwind.BusinessLogic.Implementations
         public IEnumerable<OrderList> GetPaginatedOrders(int page, int rows)
         {
             return _unityOfWork.Order.getPaginatedOrder(page, rows);
+        }
+        public string GetOrderNumber(int ord)
+        {
+            var list = _unityOfWork.Order.GetList();
+            if (list == null)
+            {
+                return string.Empty;
+            }
+            var registro = list.FirstOrDefault(z => z.Id == ord);
+            return registro.OrderNumber;
         }
     }
 }

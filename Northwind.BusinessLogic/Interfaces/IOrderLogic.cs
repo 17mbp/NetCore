@@ -8,5 +8,6 @@ namespace Northwind.BusinessLogic.Interfaces
         OrderList GetOrderById(int orderId);
         bool Delete(Order order);
         Order GetById(int Id);
+        string GetOrderNumber(int ord);
     }
 }
