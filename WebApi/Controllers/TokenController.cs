@@ -22,7 +22,7 @@ namespace WebApi.Controllers
         {
             var user = _unitOfWork.ValidateUser(userlogin.Email, userlogin.Password);
             if (user == null)
-            {
+            {//https://youtu.be/uoIUPXQihhc                  publcar somee v2.2 net core
                 throw new UnauthorizedAccessException();
             }
             var token = new JsonWebToken

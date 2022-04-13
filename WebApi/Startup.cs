@@ -28,8 +28,13 @@ namespace WebApi
             services.AddTransient<IOrderLogic, OrderLogic>();
             services.AddTransient<ITokenLogic, Token>();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-            services.AddSingleton<IUnityOfWork>(ap => new 
-            NorthwindUnitOfWork(Configuration.GetConnectionString("Northwind")));
+#if DEBUG
+            services.AddSingleton<IUnityOfWork>(ap => new
+                  NorthwindUnitOfWork(Configuration.GetConnectionString("Northwind")));
+#else
+            services.AddSingleton<IUnityOfWork>(ap => new
+                  NorthwindUnitOfWork(Configuration.GetConnectionString("Production")));
+#endif
             var tokenprovider = new JwtProvider("issuer", "audience", "northwind_2000");
             services.AddCors(options =>
             {
